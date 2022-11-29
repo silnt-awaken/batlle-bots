@@ -5,3 +5,5 @@ const accentColor = Color.fromARGB(255, 60, 59, 59);
 const buttonColor = Color.fromARGB(255, 89, 97, 89);
 const whiteColor = Color.fromARGB(255, 255, 255, 255);
 const dullWhiteColor = Color.fromARGB(255, 200, 200, 200);
+const actionColor = Color.fromARGB(255, 220, 240, 3);
+const blackColor = Color.fromARGB(255, 0, 0, 0);

@@ -2,6 +2,7 @@ import 'package:batlle_bots/app/views/game_view.dart';
 import 'package:batlle_bots/app/views/garage_view.dart';
 import 'package:batlle_bots/app/views/lobby_view.dart';
 import 'package:batlle_bots/app/views/settings_view.dart';
+import 'package:batlle_bots/repositories/game_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,6 +48,16 @@ class RouterRepository {
           },
         ),
       ],
+      redirect: (context, state) {
+        // so if you're going to /lobby, call this handler
+        if (state.location == '/Lobby') {
+          GameRepository().init();
+          return '/Lobby';
+        } else {
+          GameRepository().close();
+          return null;
+        }
+      },
     );
   }
 }

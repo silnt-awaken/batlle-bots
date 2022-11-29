@@ -6,11 +6,17 @@ part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(const GameState()) {
+  GameBloc() : super(const GameState(clients: [])) {
     final GameRepository gameRepository = GameRepository();
 
-    on<GameInitializeEvent>((event, emit) {
-      gameRepository.init();
+    on<GameInitializeEvent>((event, emit) async {
+      final List<Client> clientList = [];
+      await emit.forEach<Client>(gameRepository.clientStream, onData: (client) {
+        clientList.add(client);
+        return state.copyWith(
+          clients: clientList,
+        );
+      });
     });
   }
 }

@@ -10,7 +10,7 @@ class MenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.go('/$text'),
+      onTap: () => context.push('/$text'),
       child: Container(
         margin: const EdgeInsets.all(16.0),
         height: 125,

@@ -1,7 +1,8 @@
-import 'package:batlle_bots/repositories/game_repository.dart';
+import 'package:batlle_bots/blocs/chat/chat_bloc.dart';
 import 'package:batlle_bots/styles/colors.dart';
 import 'package:batlle_bots/styles/fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatTextField extends StatefulWidget {
   const ChatTextField({super.key});
@@ -21,19 +22,33 @@ class _ChatTextFieldState extends State<ChatTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return BlocListener<ChatBloc, ChatState>(
+      listener: (context, state) {
+        if (state.chatStatus == ChatStatus.submitted) {
+          _controller.clear();
+          context.read<ChatBloc>().add(ChatResetEvent());
+        }
+      },
+      child: TextField(
         controller: _controller,
-        style: primaryTextStyle,
+        style: primaryTextStyle.copyWith(height: 1.4),
         cursorColor: whiteColor,
+        textAlignVertical: TextAlignVertical.center,
+        cursorHeight: 30,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Type a message',
           hintStyle: primaryTextStyle.copyWith(color: dullWhiteColor),
         ),
         onEditingComplete: () {
-          // todo: send message from client channel to server
-          GameRepository.channel.sink.add(_controller.text);
+          context
+              .read<ChatBloc>()
+              .add(ChatSubmitEvent(message: _controller.text));
           _controller.clear();
-        });
+        },
+        onChanged: ((text) =>
+            context.read<ChatBloc>().add(ChatUpdateTextEvent(text: text))),
+      ),
+    );
   }
 }

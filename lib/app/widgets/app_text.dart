@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 class AppText extends StatelessWidget {
   final String text;
-  const AppText(this.text, {super.key});
+  final Color? color;
+  final double? fontSize;
+  const AppText(this.text, {this.color, this.fontSize, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: primaryTextStyle,
+      style: primaryTextStyle.copyWith(color: color, fontSize: fontSize),
     );
   }
 }
