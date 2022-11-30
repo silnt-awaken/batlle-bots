@@ -22,32 +22,25 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-        Uri.parse('ws://172.21.224.1:8080/ws'.removeHash()),
+        Uri.parse('wss://outside-server.herokuapp.com/ws'),
         pingInterval: const Duration(minutes: 1));
 
     channel?.stream.listen((message) {
-      if ((message as String).contains('User joined')) {
-        final convertString =
-            message.replaceAll(',"message":"User joined"', '');
+      if (message.contains('connected')) {
+        final convertString = message.replaceAll(',"type":"connected"', '');
         final client = Client.fromJson(jsonDecode(convertString));
         clients.add(client);
         return;
       }
-      if ((message).contains('userId')) {
-        final client = Client.fromJson(jsonDecode(message));
-        clients.add(client);
-        return;
-      }
-      if ((message).contains('User left')) {
-        final convertString = message.replaceAll(',"message":"User left"', '');
+
+      if (message.contains('disconnected')) {
+        final convertString = message.replaceAll(',"type":"disconnected"', '');
         final client = Client.fromJson(jsonDecode(convertString));
         leavingClients.add(client);
-      }
-      if (message == GameUpdateType.playerJoined.value) {
         return;
-      } else {
-        ChatRepository.chats.add(Chat.fromJson(jsonDecode(message)));
       }
+
+      ChatRepository.chats.add(Chat.fromJson(jsonDecode(message)));
     });
   }
 
