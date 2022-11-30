@@ -3,10 +3,11 @@ import 'dart:developer';
 
 import 'package:batlle_bots/models/chat.dart';
 import 'package:batlle_bots/models/client.dart';
-import 'package:batlle_bots/repositories/chat_repository.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'chat_repository.dart';
 
 class GameRepository {
   static WebSocketChannel? channel;
@@ -22,27 +23,27 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
     );
 
     channel?.stream.listen(
-      (message) {
-        if (message.contains('connected')) {
-          final convertString = message.replaceAll(',"type":"connected"', '');
-          final client = Client.fromJson(jsonDecode(convertString));
-          clients.add(client);
-          return;
-        }
+      (data) {
+        if (data is String) {
+          ChatRepository.chats.add(Chat.fromJson(jsonDecode(data)));
+        } else {
+          final json = jsonDecode(String.fromCharCodes(data));
 
-        if (message.contains('disconnected')) {
-          final convertString =
-              message.replaceAll(',"type":"disconnected"', '');
-          final client = Client.fromJson(jsonDecode(convertString));
-          leavingClients.add(client);
-          return;
+          switch (json['type']) {
+            case 'joined':
+              clients.add(Client.fromJson(json));
+              break;
+            case 'closed':
+              leavingClients.add(Client.fromJson(json));
+              break;
+            default:
+              log('Unknown message type');
+          }
         }
-
-        ChatRepository.chats.add(Chat.fromJson(jsonDecode(message)));
       },
     );
   }
@@ -52,15 +53,11 @@ class GameRepository {
   }
 }
 
-enum GameUpdateType {
-  playerJoined('Player Joined');
+// for reference
 
-  final String value;
-  const GameUpdateType(this.value);
-}
-
-extension on String {
-  String removeHash() {
-    return replaceAll('#', '');
-  }
-}
+var codes = [
+  0, // idle
+  1, // connected peer
+  2, // disconnected peer
+  3, // message
+];
