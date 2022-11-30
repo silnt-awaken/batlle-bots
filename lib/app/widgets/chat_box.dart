@@ -12,85 +12,84 @@ class ChatBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocBuilder<ChatBloc, ChatState>(
-        builder: (context, state) {
-          return Container(
-            color: buttonColor,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: ListView.builder(
-                      itemCount: state.chats.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: AppText(
-                              'Player ${state.chats[index].sender}: ${state.chats[index].text}',
-                              fontSize: 12,
-                              color: state.chats[index].color),
-                        );
-                      },
-                    ),
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, state) {
+        return Container(
+          height: 500,
+          color: buttonColor,
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: ListView.builder(
+                    itemCount: state.chats.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: AppText(
+                            'Player ${state.chats[index].sender}: ${state.chats[index].text}',
+                            fontSize: 12,
+                            color: state.chats[index].color),
+                      );
+                    },
                   ),
                 ),
-                const VerticalDivider(
-                  width: 5,
-                  color: accentColor,
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(16),
-                    color: buttonColor,
-                    child: Column(
-                      children: [
-                        BlocSelector<GameBloc, GameState, int>(
-                          selector: (state) {
-                            return state.clients.length;
-                          },
-                          builder: (context, state) {
-                            return AppText('Players online($state)',
-                                fontSize: 16);
-                          },
-                        ),
-                        Row(
+              ),
+              const VerticalDivider(
+                width: 5,
+                color: accentColor,
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  color: buttonColor,
+                  child: Column(
+                    children: [
+                      BlocSelector<GameBloc, GameState, int>(
+                        selector: (state) {
+                          return state.clients.length;
+                        },
+                        builder: (context, state) {
+                          return AppText('Players online($state)',
+                              fontSize: 16);
+                        },
+                      ),
+                      Row(
+                        children: const [
+                          Expanded(
+                            child: LobbyButton(
+                              color: redColor,
+                              text: 'Host match',
+                            ),
+                          ),
+                          Expanded(
+                            child: LobbyButton(
+                              color: greenColor,
+                              text: 'Join match',
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Expanded(
-                              child: LobbyButton(
-                                color: redColor,
-                                text: 'Host match',
-                              ),
-                            ),
-                            Expanded(
-                              child: LobbyButton(
-                                color: greenColor,
-                                text: 'Join match',
-                              ),
-                            ),
+                            TextSpacer(leading: 'wins', trailing: '0'),
+                            TextSpacer(leading: 'losses', trailing: '0'),
+                            TextSpacer(leading: 'draws', trailing: '0'),
+                            TextSpacer(leading: 'elo', trailing: '1000')
                           ],
                         ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              TextSpacer(leading: 'wins', trailing: '0'),
-                              TextSpacer(leading: 'losses', trailing: '0'),
-                              TextSpacer(leading: 'draws', trailing: '0'),
-                              TextSpacer(leading: 'elo', trailing: '1000')
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

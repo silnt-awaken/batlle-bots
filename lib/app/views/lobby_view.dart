@@ -9,12 +9,11 @@ class LobbyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: const [
-        ChatHeader(),
-        ChatBox(),
-        ChatInput(),
-      ],
-    ));
+        body: SingleChildScrollView(
+            child: Column(children: [
+      ChatHeader(),
+      ChatBox(),
+      ChatInput(),
+    ])));
   }
 }

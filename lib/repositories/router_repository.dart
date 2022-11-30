@@ -54,7 +54,6 @@ class RouterRepository {
           GameRepository().init();
           return '/Lobby';
         } else {
-          GameRepository().close();
           return null;
         }
       },

@@ -13,7 +13,7 @@ class ChatInput extends StatelessWidget {
     return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.2,
+          height: 300,
           padding: const EdgeInsets.all(32),
           child: Row(
             children: [

@@ -22,7 +22,7 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-        Uri.parse('wss://outside-server.herokuapp.com/ws'),
+        Uri.parse('ws://172.21.224.1:8080/ws'.removeHash()),
         pingInterval: const Duration(minutes: 1));
 
     channel?.stream.listen((message) {
