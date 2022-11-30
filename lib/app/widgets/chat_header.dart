@@ -1,4 +1,5 @@
 import 'package:batlle_bots/app/app_barrel.dart';
+import 'package:batlle_bots/repositories/game_repository.dart';
 import 'package:batlle_bots/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,11 +15,15 @@ class ChatHeader extends StatelessWidget {
       color: buttonColor,
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back_ios_new),
-            iconSize: 32,
-            color: whiteColor,
+          GestureDetector(
+            onTap: () {
+              context.pop();
+              GameRepository().close();
+            },
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: AppText('<', fontSize: 32),
+            ),
           ),
           const Expanded(
             child: Center(child: AppText('Battle Bots')),
