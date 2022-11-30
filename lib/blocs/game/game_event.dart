@@ -7,3 +7,5 @@ abstract class GameEvent {
 class GameInitializeEvent extends GameEvent {}
 
 class GameRemoveClient extends GameEvent {}
+
+class GameGetPlayerCountEvent extends GameEvent {}

@@ -17,9 +17,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<GameBloc>(
-          create: (_) => GameBloc()
-            ..add(GameInitializeEvent())
-            ..add(GameRemoveClient()),
+          create: (_) => GameBloc()..add(GameGetPlayerCountEvent()),
           lazy: false,
         ),
         BlocProvider<ChatBloc>(
