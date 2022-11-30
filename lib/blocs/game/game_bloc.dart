@@ -18,6 +18,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       });
     });
 
-    on<GameRemoveClient>((event, emit) async {});
+    on<GameRemoveClient>((event, emit) async {
+      await emit.forEach(GameRepository.leavingClientStream, onData: (data) {
+        final clientList = List.of(state.clients);
+        clientList.removeWhere((client) => client.id == data.id);
+        return state.copyWith(
+          clients: clientList,
+        );
+      });
+    });
   }
 }

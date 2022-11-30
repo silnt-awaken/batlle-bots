@@ -6,7 +6,4 @@ abstract class GameEvent {
 
 class GameInitializeEvent extends GameEvent {}
 
-class GameRemoveClient extends GameEvent {
-  const GameRemoveClient(this.client);
-  final Client client;
-}
+class GameRemoveClient extends GameEvent {}
