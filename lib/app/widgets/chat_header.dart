@@ -16,9 +16,9 @@ class ChatHeader extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               context.pop();
-              GameRepository().close();
+              await GameRepository().close();
             },
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

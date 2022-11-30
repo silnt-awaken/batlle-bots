@@ -44,8 +44,8 @@ class GameRepository {
     });
   }
 
-  void close() {
-    channel?.sink.close() ?? log('channel is null');
+  Future<void> close() async {
+    await channel?.sink.close() ?? log('channel is null');
   }
 }
 
