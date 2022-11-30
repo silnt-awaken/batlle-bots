@@ -22,26 +22,29 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-        Uri.parse('wss://outside-server.herokuapp.com/ws'),
-        pingInterval: const Duration(minutes: 1));
+      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+    );
 
-    channel?.stream.listen((message) {
-      if (message.contains('connected')) {
-        final convertString = message.replaceAll(',"type":"connected"', '');
-        final client = Client.fromJson(jsonDecode(convertString));
-        clients.add(client);
-        return;
-      }
+    channel?.stream.listen(
+      (message) {
+        if (message.contains('connected')) {
+          final convertString = message.replaceAll(',"type":"connected"', '');
+          final client = Client.fromJson(jsonDecode(convertString));
+          clients.add(client);
+          return;
+        }
 
-      if (message.contains('disconnected')) {
-        final convertString = message.replaceAll(',"type":"disconnected"', '');
-        final client = Client.fromJson(jsonDecode(convertString));
-        leavingClients.add(client);
-        return;
-      }
+        if (message.contains('disconnected')) {
+          final convertString =
+              message.replaceAll(',"type":"disconnected"', '');
+          final client = Client.fromJson(jsonDecode(convertString));
+          leavingClients.add(client);
+          return;
+        }
 
-      ChatRepository.chats.add(Chat.fromJson(jsonDecode(message)));
-    });
+        ChatRepository.chats.add(Chat.fromJson(jsonDecode(message)));
+      },
+    );
   }
 
   Future<void> close() async {
