@@ -17,5 +17,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         );
       });
     });
+
+    on<GameRemoveClient>((event, emit) async {});
   }
 }

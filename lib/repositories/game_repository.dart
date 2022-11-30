@@ -25,6 +25,7 @@ class GameRepository {
             message.replaceAll(',"message":"User joined"', '');
         final client = Client.fromJson(jsonDecode(convertString));
         clients.add(client);
+
         //clients.add(Client.fromJson(jsonDecode(convertString)));
         return;
       }
