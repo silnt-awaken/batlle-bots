@@ -11,6 +11,12 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class GameRepository {
   static WebSocketChannel? channel;
 
+  static final BehaviorSubject<Client> leavingClients =
+      BehaviorSubject<Client>();
+
+  static Stream<Client> get leavingClientStream =>
+      leavingClients.asBroadcastStream();
+
   static final BehaviorSubject<Client> clients = BehaviorSubject<Client>();
   static Stream<Client> get clientStream => clients.asBroadcastStream();
 
@@ -25,14 +31,17 @@ class GameRepository {
             message.replaceAll(',"message":"User joined"', '');
         final client = Client.fromJson(jsonDecode(convertString));
         clients.add(client);
-
-        //clients.add(Client.fromJson(jsonDecode(convertString)));
         return;
       }
       if ((message).contains('userId')) {
         final client = Client.fromJson(jsonDecode(message));
         clients.add(client);
         return;
+      }
+      if ((message).contains('User left')) {
+        final convertString = message.replaceAll(',"message":"User left"', '');
+        final client = Client.fromJson(jsonDecode(convertString));
+        leavingClients.add(client);
       }
       if (message == GameUpdateType.playerJoined.value) {
         return;
