@@ -5,13 +5,19 @@ class AppText extends StatelessWidget {
   final String text;
   final Color? color;
   final double? fontSize;
-  const AppText(this.text, {this.color, this.fontSize, super.key});
+  final TextAlign? textAlign;
+  const AppText(this.text,
+      {this.color, this.fontSize, this.textAlign, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: primaryTextStyle.copyWith(color: color, fontSize: fontSize),
+      style: primaryTextStyle.copyWith(
+        color: color,
+        fontSize: fontSize,
+      ),
+      textAlign: textAlign,
     );
   }
 }

@@ -15,7 +15,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       await emit.forEach(GameRepository.clientsSubjectStream,
           onData: (clients) {
         log('there are ${clients.length} clients');
-        return state.copyWith(clients: clients);
+        final tempClients = List.of(clients);
+        return state.copyWith(clients: tempClients);
       });
     });
   }

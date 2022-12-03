@@ -9,16 +9,18 @@ class LobbyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(32),
-        height: 100,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        alignment: Alignment.center,
-        child: AppText(
-          text,
-          fontSize: 14,
-        ));
+      margin: const EdgeInsets.all(32),
+      height: 100,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      alignment: Alignment.center,
+      child: AppText(
+        text,
+        fontSize: 14,
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }
