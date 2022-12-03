@@ -1,17 +1,25 @@
 // todo: have a list of random colors and assign them to the bots
 
+import 'package:uuid/uuid.dart';
+
 class Client {
-  final String id;
+  late final String id;
+  final bool isDeployed;
 
-  Client({required this.id});
-
-  factory Client.fromJson(Map<String, dynamic> json) {
-    return Client(id: json['userId'].toString());
+  Client({this.id = '', this.isDeployed = false}) {
+    id = const Uuid().v4();
   }
 
-  @override
-  String toString() {
-    // TODO: implement toString
-    return 'Client(id: $id)';
+  factory Client.fromJson(Map<String, dynamic> json) {
+    return Client().copyWith(
+      id: json['counter'],
+    );
+  }
+
+  Client copyWith({String? id, bool? isDeployed}) {
+    return Client(
+      id: id ?? this.id,
+      isDeployed: isDeployed ?? this.isDeployed,
+    );
   }
 }

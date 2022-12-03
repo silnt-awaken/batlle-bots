@@ -12,26 +12,22 @@ import 'chat_repository.dart';
 class GameRepository {
   static WebSocketChannel? channel;
 
-  static final BehaviorSubject<int> _clientCount = BehaviorSubject<int>();
-  static Stream<int> clientCountStream = _clientCount.asBroadcastStream();
+  static final ReplaySubject<List<Client>> _clientsSubject =
+      ReplaySubject<List<Client>>();
 
-  static final BehaviorSubject<Client> leavingClients =
-      BehaviorSubject<Client>();
-
-  static Stream<Client> get leavingClientStream =>
-      leavingClients.asBroadcastStream();
-
-  static final BehaviorSubject<Client> clients = BehaviorSubject<Client>();
-  static Stream<Client> get clientStream => clients.asBroadcastStream();
+  static Stream<List<Client>> get clientsSubjectStream =>
+      _clientsSubject.asBroadcastStream();
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('ws://localhost:8080/ws'),
+      Uri.parse('wss://outside-server.herokuapp.com/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 
+    var clientList = <Client>[];
+
     channel?.stream.listen(
-      (data) {
+      (data) async {
         if (data is String) {
           ChatRepository.chats.add(Chat.fromJson(jsonDecode(data)));
         } else {
@@ -39,14 +35,24 @@ class GameRepository {
 
           switch (json['type']) {
             case 'joined':
+              clientList.clear();
+              clientList.addAll(await clientsSubjectStream.last);
+              clientList.add(Client.fromJson(json['counter']));
+              _clientsSubject.add(clientList);
+              break;
             case 'closed':
-              log('client count: ${json['counter']}');
-              _clientCount.add(json['counter']);
+              clientList.clear();
+              clientList.addAll(await clientsSubjectStream.last);
+              clientList
+                  .removeWhere((element) => element.id == json['counter']);
+              _clientsSubject.add(clientList);
+
               break;
             default:
               log('Unknown message type');
           }
         }
+        log(clientsSubjectStream.toString());
       },
     );
   }

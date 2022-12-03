@@ -1,17 +1,17 @@
 part of 'game_bloc.dart';
 
 class GameState extends Equatable {
-  final int clientCounter;
-  const GameState({required this.clientCounter});
+  final List<Client> clients;
+  const GameState({required this.clients});
 
   @override
-  List<Object> get props => [clientCounter];
+  List<Object> get props => [clients];
 
   GameState copyWith({
-    int? clientCounter,
+    List<Client>? clients,
   }) {
     return GameState(
-      clientCounter: clientCounter ?? this.clientCounter,
+      clients: clients ?? this.clients,
     );
   }
 }

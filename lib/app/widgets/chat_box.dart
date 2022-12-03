@@ -49,7 +49,7 @@ class ChatBox extends StatelessWidget {
                     children: [
                       BlocSelector<GameBloc, GameState, int>(
                         selector: (state) {
-                          return state.clientCounter;
+                          return state.clients.length;
                         },
                         builder: (context, state) {
                           return AppText('Players online($state)',

@@ -1,17 +1,18 @@
+import 'package:batlle_bots/models/client.dart';
 import 'package:batlle_bots/repositories/game_repository.dart';
-import 'package:bloc/bloc.dart';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(const GameState(clientCounter: 0)) {
+  GameBloc() : super(const GameState(clients: [])) {
     on<GameGetPlayerCountEvent>((event, emit) async {
-      await emit.forEach(GameRepository.clientCountStream, onData: (count) {
-        return state.copyWith(
-          clientCounter: count,
-        );
+      await emit.forEach(GameRepository.clientsSubjectStream,
+          onData: (clients) {
+        return state.copyWith(clients: clients);
       });
     });
   }
