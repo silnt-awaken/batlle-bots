@@ -45,6 +45,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
               .read<ChatBloc>()
               .add(ChatSubmitEvent(message: _controller.text));
           _controller.clear();
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         onChanged: ((text) =>
             context.read<ChatBloc>().add(ChatUpdateTextEvent(text: text))),

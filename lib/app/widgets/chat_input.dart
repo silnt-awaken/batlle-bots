@@ -28,9 +28,12 @@ class ChatInput extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               GestureDetector(
-                onTap: () => context
-                    .read<ChatBloc>()
-                    .add(ChatSubmitEvent(message: state.currentText)),
+                onTap: () {
+                  context
+                      .read<ChatBloc>()
+                      .add(ChatSubmitEvent(message: state.currentText));
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
                 child: Container(
                   width: 100,
                   height: 50,
