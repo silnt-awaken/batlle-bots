@@ -36,13 +36,15 @@ class GameRepository {
           switch (json['type']) {
             case 'joined':
               clientList.clear();
-              clientList.addAll(await clientsSubjectStream.last);
+              final lastClientList = await clientsSubjectStream.last;
+              clientList.addAll(lastClientList);
               clientList.add(Client.fromJson(json['counter']));
               _clientsSubject.add(clientList);
               break;
             case 'closed':
               clientList.clear();
-              clientList.addAll(await clientsSubjectStream.last);
+              final lastClientList = await clientsSubjectStream.last;
+              clientList.addAll(lastClientList);
               clientList
                   .removeWhere((element) => element.id == json['counter']);
               _clientsSubject.add(clientList);
