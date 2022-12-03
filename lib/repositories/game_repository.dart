@@ -26,7 +26,8 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
+      pingInterval: const Duration(minutes: 5),
     );
 
     channel?.stream.listen(
@@ -39,6 +40,7 @@ class GameRepository {
           switch (json['type']) {
             case 'joined':
             case 'closed':
+              log('client count: ${json['counter']}');
               _clientCount.add(json['counter']);
               break;
             default:

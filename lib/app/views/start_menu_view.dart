@@ -7,18 +7,22 @@ class StartMenuView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: ['Lobby', 'Garage', 'Settings']
-                .map(
-                  (String text) => MenuButton(
-                    text: text,
-                  ),
-                )
-                .toList(),
+      body: SizedBox.expand(
+        child: Center(
+          child: SizedBox(
+            width: 500,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: ['Lobby', 'Garage', 'Settings']
+                    .map(
+                      (String text) => MenuButton(
+                        text: text,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
           ),
         ),
       ),

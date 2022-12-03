@@ -6,6 +6,7 @@ import 'package:batlle_bots/blocs/game/game_bloc.dart';
 import 'package:batlle_bots/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatBox extends StatelessWidget {
   const ChatBox({super.key});
@@ -56,17 +57,22 @@ class ChatBox extends StatelessWidget {
                         },
                       ),
                       Row(
-                        children: const [
-                          Expanded(
+                        children: [
+                          const Expanded(
                             child: LobbyButton(
                               color: redColor,
                               text: 'Host match',
                             ),
                           ),
                           Expanded(
-                            child: LobbyButton(
-                              color: greenColor,
-                              text: 'Join match',
+                            child: GestureDetector(
+                              onTap: () {
+                                context.push('/Game');
+                              },
+                              child: const LobbyButton(
+                                color: greenColor,
+                                text: 'Join match',
+                              ),
                             ),
                           ),
                         ],
