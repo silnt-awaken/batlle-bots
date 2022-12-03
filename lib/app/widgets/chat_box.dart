@@ -16,7 +16,7 @@ class ChatBox extends StatelessWidget {
     return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         return Container(
-          height: 500,
+          height: 400,
           color: buttonColor,
           child: Row(
             children: [
@@ -78,14 +78,16 @@ class ChatBox extends StatelessWidget {
                         ],
                       ),
                       Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            TextSpacer(leading: 'wins', trailing: '0'),
-                            TextSpacer(leading: 'losses', trailing: '0'),
-                            TextSpacer(leading: 'draws', trailing: '0'),
-                            TextSpacer(leading: 'elo', trailing: '1000')
-                          ],
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              TextSpacer(leading: 'wins', trailing: '0'),
+                              TextSpacer(leading: 'losses', trailing: '0'),
+                              TextSpacer(leading: 'draws', trailing: '0'),
+                              TextSpacer(leading: 'elo', trailing: '1000')
+                            ],
+                          ),
                         ),
                       ),
                     ],

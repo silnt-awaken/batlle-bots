@@ -16,6 +16,9 @@ class LobbyButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
-        child: AppText(text));
+        child: AppText(
+          text,
+          fontSize: 14,
+        ));
   }
 }
