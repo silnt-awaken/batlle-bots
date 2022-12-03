@@ -20,7 +20,7 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 
@@ -35,26 +35,19 @@ class GameRepository {
 
           switch (json['type']) {
             case 'joined':
-              clientList.clear();
-              final lastClientList = await clientsSubjectStream.last;
-              clientList.addAll(lastClientList);
-              clientList.add(Client.fromJson(json['counter']));
-              _clientsSubject.add(clientList);
-              break;
             case 'closed':
               clientList.clear();
-              final lastClientList = await clientsSubjectStream.last;
-              clientList.addAll(lastClientList);
-              clientList
-                  .removeWhere((element) => element.id == json['counter']);
-              _clientsSubject.add(clientList);
 
+              json['clients'].forEach((client) {
+                clientList.add(Client(id: client.toString()));
+              });
+
+              _clientsSubject.add(clientList);
               break;
             default:
               log('Unknown message type');
           }
         }
-        log(clientsSubjectStream.toString());
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:batlle_bots/models/client.dart';
 import 'package:batlle_bots/repositories/game_repository.dart';
 
@@ -12,6 +14,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GameGetPlayerCountEvent>((event, emit) async {
       await emit.forEach(GameRepository.clientsSubjectStream,
           onData: (clients) {
+        log('there are ${clients.length} clients');
         return state.copyWith(clients: clients);
       });
     });
