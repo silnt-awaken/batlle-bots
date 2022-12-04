@@ -24,8 +24,14 @@ class BattleBotsWorld extends World
       if (client.isDeployed) {
         gameRef.add(Player(clientId: client.id, position: client.position));
       } else {
+        final clientList = BlocProvider.of<GameBloc>(gameRef.buildContext!)
+            .state
+            .clients
+            .map((client) => client.id)
+            .toList();
+
         gameRef.removeWhere((component) =>
-            component is Player && component.id.toString() == client.id);
+            component is Player && !clientList.contains(component.clientId));
       }
     });
   }

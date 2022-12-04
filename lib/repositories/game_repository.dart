@@ -50,24 +50,38 @@ class GameRepository {
                       .indexWhere((client) => client.id == json['client'])] =
                   clientList[clientList
                           .indexWhere((client) => client.id == json['client'])]
-                      .copyWith(isDeployed: true);
+                      .copyWith(
+                isDeployed: true,
+                position: Vector2(
+                  Random().nextInt(200).toDouble(),
+                  Random().nextInt(200).toDouble(),
+                ),
+              );
               _clientsSubject.add(clientList);
               break;
             case 'joined':
             case 'closed':
+              final listOfIndexesThatAreDeployed = clientList
+                  .where((client) => client.isDeployed)
+                  .map((client) => client.id)
+                  .toList();
               clientList.clear();
 
               json['clients'].forEach((client) {
                 clientList.add(
                   Client(
                     id: client.toString(),
-                    position: Vector2(
-                      Random().nextInt(200).toDouble(),
-                      Random().nextInt(200).toDouble(),
-                    ),
+                    position: Vector2.zero(),
                   ),
                 );
               });
+
+              for (var id in listOfIndexesThatAreDeployed) {
+                clientList[clientList.indexWhere((client) => client.id == id)] =
+                    clientList[
+                            clientList.indexWhere((client) => client.id == id)]
+                        .copyWith(isDeployed: true);
+              }
 
               _clientsSubject.add(clientList);
               break;

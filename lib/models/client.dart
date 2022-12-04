@@ -13,11 +13,11 @@ class Client {
     required this.position,
   });
 
-  Client copyWith({String? id, bool? isDeployed}) {
+  Client copyWith({String? id, bool? isDeployed, Vector2? position}) {
     return Client(
       id: id ?? this.id,
       isDeployed: isDeployed ?? this.isDeployed,
-      position: position,
+      position: position ?? this.position,
     );
   }
 }
