@@ -61,10 +61,17 @@ class GameRepository {
               break;
             case 'joined':
             case 'closed':
-              final listOfIndexesThatAreDeployed = clientList
+              final mapOfClientProperties = <String, Vector2>{};
+              clientList
+                  // json['clients'] has the updated list of clients
+                  // we want to only include the clients that are in the updated list
+                  .where((client) =>
+                      json['clients'].contains(int.parse(client.id)))
                   .where((client) => client.isDeployed)
-                  .map((client) => client.id)
+                  .map((client) =>
+                      mapOfClientProperties[client.id] = client.position)
                   .toList();
+
               clientList.clear();
 
               json['clients'].forEach((client) {
@@ -76,11 +83,13 @@ class GameRepository {
                 );
               });
 
-              for (var id in listOfIndexesThatAreDeployed) {
-                clientList[clientList.indexWhere((client) => client.id == id)] =
-                    clientList[
-                            clientList.indexWhere((client) => client.id == id)]
-                        .copyWith(isDeployed: true);
+              for (var props in mapOfClientProperties.entries) {
+                final index =
+                    clientList.indexWhere((client) => client.id == props.key);
+                clientList[index] = clientList[index].copyWith(
+                  isDeployed: true,
+                  position: props.value,
+                );
               }
 
               _clientsSubject.add(clientList);
