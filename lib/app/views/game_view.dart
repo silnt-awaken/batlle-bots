@@ -19,10 +19,6 @@ class GameView extends StatelessWidget {
                   .map(
                     (client) => Player(
                       clientId: client.id,
-                      position: Vector2(
-                        100 + 100 * state.clients.indexOf(client).toDouble(),
-                        100 + 100 * state.clients.indexOf(client).toDouble(),
-                      ),
                     ),
                   )
                   .toList(),

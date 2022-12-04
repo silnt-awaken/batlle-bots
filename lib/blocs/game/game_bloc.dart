@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:batlle_bots/models/client.dart';
@@ -27,6 +28,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<GameDeployClient>((event, emit) {
+      GameRepository.channel!.sink.add(json.encode({
+        'type': 'deploy',
+        'client': event.client.id,
+      }).codeUnits);
       emit(state.copyWith(
         client: () => state.client!.copyWith(isDeployed: true),
       ));

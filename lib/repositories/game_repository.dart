@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:batlle_bots/models/chat.dart';
 import 'package:batlle_bots/models/client.dart';
+import 'package:flame/components.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -25,7 +26,7 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 
@@ -39,7 +40,8 @@ class GameRepository {
           final json = jsonDecode(String.fromCharCodes(data));
 
           if (json['selected_client'] != null) {
-            clientSubject.add(Client(id: json['selected_client']));
+            clientSubject.add(
+                Client(id: json['selected_client'], position: Vector2.zero()));
           }
 
           switch (json['type']) {
@@ -48,7 +50,10 @@ class GameRepository {
               clientList.clear();
 
               json['clients'].forEach((client) {
-                clientList.add(Client(id: client.toString()));
+                clientList.add(Client(
+                    id: client.toString(),
+                    position: Vector2(Random().nextInt(500).toDouble(),
+                        Random().nextInt(500).toDouble())));
               });
 
               _clientsSubject.add(clientList);
@@ -62,7 +67,7 @@ class GameRepository {
   }
 
   Future<void> close() async {
-    await channel?.sink.close() ?? log('channel is null');
+    await channel?.sink.close() ?? print('channel is null');
   }
 }
 
