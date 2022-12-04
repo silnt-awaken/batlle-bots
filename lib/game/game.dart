@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BattleBotsGame extends FlameGame {
   late final BattleBotsWorld world;
 
+  BattleBotsGame({super.children});
+
   @override
   Color backgroundColor() => const Color.fromARGB(0, 125, 61, 61);
 
@@ -25,7 +27,7 @@ class BattleBotsGame extends FlameGame {
       SpriteComponent(
         sprite: backgroundImage,
         size: Vector2(1200, 700),
-        priority: -1,
+        priority: -5,
       ),
     );
   }

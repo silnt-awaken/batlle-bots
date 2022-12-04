@@ -60,8 +60,8 @@ class GameRepository {
               json['clients'].forEach((client) {
                 clientList.add(Client(
                     id: client.toString(),
-                    position: Vector2(Random().nextInt(500).toDouble(),
-                        Random().nextInt(500).toDouble())));
+                    position: Vector2(Random().nextInt(200).toDouble(),
+                        Random().nextInt(200).toDouble())));
               });
 
               _clientsSubject.add(clientList);

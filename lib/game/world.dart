@@ -22,7 +22,7 @@ class BattleBotsWorld extends World
         .where((client) => client.id != clientId)
         .forEach((client) {
       if (client.isDeployed) {
-        add(Player(clientId: client.id, position: client.position));
+        gameRef.add(Player(clientId: client.id, position: client.position));
       }
     });
   }
