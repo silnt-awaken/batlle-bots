@@ -38,6 +38,7 @@ class Entity extends PositionComponent {
   @override
   void onMount() {
     log('Mounted $debugName:$id to $parent', level: _infoLogLevel);
+    log('The position of $debugName:$id is $position', level: _infoLogLevel);
     super.onMount();
   }
 

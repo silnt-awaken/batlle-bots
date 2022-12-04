@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:batlle_bots/game/entity.dart';
 import 'package:batlle_bots/game/game.dart';
 import 'package:flame/components.dart';
@@ -22,7 +24,21 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
     debugMode = true;
     final image = gameRef.images.fromCache('player.png');
     final sprite = Sprite(image);
-    await add(SpriteComponent(sprite: sprite, size: Vector2(100, 100)));
+    await add(SpriteComponent(
+        sprite: sprite,
+        anchor: Anchor.center,
+        size: Vector2(100, 100),
+        position: Vector2(Random().nextInt(300).toDouble(),
+            Random().nextInt(300).toDouble())));
     return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    // TODO: implement update
+    super.update(dt);
+    print(position);
+    position.x += 5 * dt;
+    position.y += 5 * dt;
   }
 }

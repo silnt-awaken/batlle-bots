@@ -13,8 +13,7 @@ class ChatBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GameBloc, GameState>(
-      listener: (context, state) => print('hello'),
+    return BlocBuilder<GameBloc, GameState>(
       builder: (context, gameState) {
         return BlocBuilder<ChatBloc, ChatState>(
           builder: (context, chatState) {
