@@ -12,15 +12,20 @@ import 'chat_repository.dart';
 class GameRepository {
   static WebSocketChannel? channel;
 
-  static final ReplaySubject<List<Client>> _clientsSubject =
-      ReplaySubject<List<Client>>();
+  static final BehaviorSubject<Client> clientSubject =
+      BehaviorSubject<Client>();
+
+  static Stream<Client> get clientStream => clientSubject.stream;
+
+  static final BehaviorSubject<List<Client>> _clientsSubject =
+      BehaviorSubject<List<Client>>();
 
   static Stream<List<Client>> get clientsSubjectStream =>
       _clientsSubject.asBroadcastStream();
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 
@@ -32,6 +37,10 @@ class GameRepository {
           ChatRepository.chats.add(Chat.fromJson(jsonDecode(data)));
         } else {
           final json = jsonDecode(String.fromCharCodes(data));
+
+          if (json['selected_client'] != null) {
+            clientSubject.add(Client(id: json['selected_client']));
+          }
 
           switch (json['type']) {
             case 'joined':
@@ -45,7 +54,7 @@ class GameRepository {
               _clientsSubject.add(clientList);
               break;
             default:
-              log('Unknown message type');
+              break;
           }
         }
       },

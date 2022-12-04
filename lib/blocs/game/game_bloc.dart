@@ -11,6 +11,12 @@ part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc() : super(const GameState(clients: [])) {
+    on<GameSetClient>((event, emit) async {
+      await emit.forEach(GameRepository.clientStream, onData: (client) {
+        log('client connected');
+        return state.copyWith(client: () => client);
+      });
+    });
     on<GameGetPlayerCountEvent>((event, emit) async {
       await emit.forEach(GameRepository.clientsSubjectStream,
           onData: (clients) {
@@ -18,6 +24,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         final tempClients = List.of(clients);
         return state.copyWith(clients: tempClients);
       });
+    });
+
+    on<GameDeployClient>((event, emit) {
+      emit(state.copyWith(
+        client: () => state.client!.copyWith(isDeployed: true),
+      ));
     });
   }
 }
