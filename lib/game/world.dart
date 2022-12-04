@@ -14,12 +14,6 @@ class BattleBotsWorld extends World
   final String clientId;
 
   @override
-  Future<void>? onLoad() {
-    add(Player(clientId: '000'));
-    return super.onLoad();
-  }
-
-  @override
   void onNewState(GameState state) {
     super.onNewState(state);
     BlocProvider.of<GameBloc>(gameRef.buildContext!)
@@ -28,7 +22,7 @@ class BattleBotsWorld extends World
         .where((client) => client.id != clientId)
         .forEach((client) {
       if (client.isDeployed) {
-        add(Player(clientId: client.id));
+        add(Player(clientId: client.id, position: client.position));
       }
     });
   }
