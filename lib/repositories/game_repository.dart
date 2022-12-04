@@ -45,6 +45,14 @@ class GameRepository {
           }
 
           switch (json['type']) {
+            case 'deploy':
+              clientList[clientList
+                      .indexWhere((client) => client.id == json['client'])] =
+                  clientList[clientList
+                          .indexWhere((client) => client.id == json['client'])]
+                      .copyWith(isDeployed: true);
+              _clientsSubject.add(clientList);
+              break;
             case 'joined':
             case 'closed':
               clientList.clear();
@@ -70,12 +78,3 @@ class GameRepository {
     await channel?.sink.close() ?? print('channel is null');
   }
 }
-
-// for reference
-
-var codes = [
-  0, // idle
-  1, // connected peer
-  2, // disconnected peer
-  3, // message
-];

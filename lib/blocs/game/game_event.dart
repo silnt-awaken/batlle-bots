@@ -16,3 +16,5 @@ class GameDeployClient extends GameEvent {
 }
 
 class GameSetClient extends GameEvent {}
+
+class GameHandleDeployedState extends GameEvent {}

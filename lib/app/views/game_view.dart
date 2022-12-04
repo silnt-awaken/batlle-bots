@@ -10,7 +10,12 @@ class GameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GameBloc, GameState>(
+    return BlocConsumer<GameBloc, GameState>(
+      listener: (context, state) {
+        if (state.status == GameStatus.deploying) {
+          context.read<GameBloc>().add(GameHandleDeployedState());
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: GameWidget.controlled(

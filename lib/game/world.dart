@@ -17,7 +17,6 @@ class BattleBotsWorld extends World
 
   @override
   void onNewState(GameState state) {
-    // TODO: implement onNewState
     super.onNewState(state);
     BlocProvider.of<GameBloc>(gameRef.buildContext!)
         .state
