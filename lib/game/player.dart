@@ -32,7 +32,6 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
 
   @override
   void update(double dt) {
-    print('Client $clientId position: $position');
     super.update(dt);
     position.x += 2 * dt;
     position.y += 2 * dt;

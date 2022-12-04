@@ -23,6 +23,9 @@ class BattleBotsWorld extends World
         .forEach((client) {
       if (client.isDeployed) {
         gameRef.add(Player(clientId: client.id, position: client.position));
+      } else {
+        gameRef.removeWhere((component) =>
+            component is Player && component.id.toString() == client.id);
       }
     });
   }
