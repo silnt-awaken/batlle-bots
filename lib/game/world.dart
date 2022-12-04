@@ -9,11 +9,15 @@ import 'game.dart';
 
 class BattleBotsWorld extends World
     with HasGameRef<BattleBotsGame>, FlameBlocListenable<GameBloc, GameState> {
-  // we need to see if there is a new state when the game has new clients
-
-  BattleBotsWorld({super.children, required this.clientId});
+  BattleBotsWorld({required this.clientId});
 
   final String clientId;
+
+  @override
+  Future<void>? onLoad() {
+    add(Player(clientId: '000'));
+    return super.onLoad();
+  }
 
   @override
   void onNewState(GameState state) {
@@ -24,8 +28,7 @@ class BattleBotsWorld extends World
         .where((client) => client.id != clientId)
         .forEach((client) {
       if (client.isDeployed) {
-        // todo update server that client has been deployed. currently it is setting false because it is only set up for the local player
-        add(Player(clientId: client.id, position: client.position));
+        add(Player(clientId: client.id));
       }
     });
   }

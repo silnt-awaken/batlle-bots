@@ -1,4 +1,5 @@
 import 'package:batlle_bots/blocs/game/game_bloc.dart';
+import 'package:batlle_bots/game/player.dart';
 import 'package:batlle_bots/game/world.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -8,8 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BattleBotsGame extends FlameGame {
   late final BattleBotsWorld world;
-
-  BattleBotsGame({super.children});
 
   @override
   Color backgroundColor() => const Color.fromARGB(0, 125, 61, 61);
@@ -34,12 +33,22 @@ class BattleBotsGame extends FlameGame {
   @override
   void onAttach() async {
     world = BattleBotsWorld(
-        children: children,
         clientId: BlocProvider.of<GameBloc>(buildContext!).state.client!.id);
     await add(
       FlameBlocProvider<GameBloc, GameState>.value(
         value: BlocProvider.of<GameBloc>(buildContext!),
-        children: [world],
+        children: [
+          world,
+          ...BlocProvider.of<GameBloc>(buildContext!)
+              .state
+              .clients
+              .map(
+                (client) => Player(
+                  clientId: client.id,
+                ),
+              )
+              .toList(),
+        ],
       ),
     );
     super.onAttach();

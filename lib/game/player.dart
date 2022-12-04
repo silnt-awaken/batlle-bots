@@ -22,8 +22,7 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
     debugMode = true;
     final image = gameRef.images.fromCache('player.png');
     final sprite = Sprite(image);
-    await add(SpriteComponent(
-        sprite: sprite, size: Vector2(100, 100), position: Vector2(100, 100)));
+    await add(SpriteComponent(sprite: sprite, size: Vector2(100, 100)));
     return super.onLoad();
   }
 }
