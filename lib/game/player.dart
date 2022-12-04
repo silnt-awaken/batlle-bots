@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:batlle_bots/game/entity.dart';
 import 'package:batlle_bots/game/game.dart';
 import 'package:flame/components.dart';
@@ -28,8 +26,7 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
         sprite: sprite,
         anchor: Anchor.center,
         size: Vector2(100, 100),
-        position: Vector2(Random().nextInt(300).toDouble(),
-            Random().nextInt(300).toDouble())));
+        position: position));
     return super.onLoad();
   }
 

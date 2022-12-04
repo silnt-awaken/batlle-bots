@@ -45,6 +45,7 @@ class BattleBotsGame extends FlameGame {
               .map(
                 (client) => Player(
                   clientId: client.id,
+                  position: client.position,
                 ),
               )
               .toList(),
