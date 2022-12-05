@@ -1,6 +1,8 @@
-import 'package:batlle_bots/game/entity.dart';
+import 'package:batlle_bots/game/behaviors/behaviors_barrel.dart';
 import 'package:batlle_bots/game/game.dart';
 import 'package:flame/components.dart';
+import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flutter/services.dart';
 
 class Player extends Entity with HasGameRef<BattleBotsGame> {
   Player({
@@ -9,10 +11,10 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
     super.size,
     super.scale,
     super.angle,
-    super.nativeAngle,
     super.anchor,
     super.children,
     super.priority,
+    super.behaviors,
   });
 
   final String clientId;
@@ -24,16 +26,54 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
     final sprite = Sprite(image);
     await add(SpriteComponent(
         sprite: sprite,
-        size: Vector2(100, 100),
+        size: Vector2(30, 30),
         position: position,
         priority: priority));
     return super.onLoad();
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-    position.x += 2 * dt;
-    position.y += 2 * dt;
-  }
+  Player.arrows({
+    required Vector2 center,
+  }) : this._withKeys(
+            center: center,
+            upKey: LogicalKeyboardKey.arrowUp,
+            downKey: LogicalKeyboardKey.arrowDown,
+            leftKey: LogicalKeyboardKey.arrowLeft,
+            rightKey: LogicalKeyboardKey.arrowRight,
+            clientId: '',
+            position: Vector2.zero());
+
+  /// {@macro paddle}
+  ///
+  /// Uses WASD keys.
+  Player.wasd({
+    required Vector2 center,
+    required String clientId,
+    required Vector2 position,
+  }) : this._withKeys(
+          center: center,
+          upKey: LogicalKeyboardKey.keyW,
+          downKey: LogicalKeyboardKey.keyS,
+          leftKey: LogicalKeyboardKey.keyA,
+          rightKey: LogicalKeyboardKey.keyD,
+          clientId: clientId,
+          position: position,
+        );
+
+  Player._withKeys({
+    required Vector2 center,
+    required LogicalKeyboardKey upKey,
+    required LogicalKeyboardKey downKey,
+    required LogicalKeyboardKey leftKey,
+    required LogicalKeyboardKey rightKey,
+    required String clientId,
+    required Vector2 position,
+  }) : this(clientId: clientId, position: position, behaviors: [
+          KeyboardMovingBehavior(
+            upKey: upKey,
+            downKey: downKey,
+            leftKey: leftKey,
+            rightKey: rightKey,
+          ),
+        ]);
 }

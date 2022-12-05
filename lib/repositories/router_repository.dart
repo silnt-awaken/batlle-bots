@@ -44,7 +44,7 @@ class RouterRepository {
         GoRoute(
           path: '/Game',
           builder: (BuildContext context, GoRouterState state) {
-            return const GameView();
+            return GameView();
           },
         ),
       ],

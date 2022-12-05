@@ -1,11 +1,12 @@
 import 'package:batlle_bots/blocs/game/game_bloc.dart';
 import 'package:batlle_bots/game/game.dart';
+import 'package:batlle_bots/game/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GameView extends StatelessWidget {
-  const GameView({super.key});
+  GameView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +17,30 @@ class GameView extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        playersList.addAll([
+          ...BlocProvider.of<GameBloc>(context)
+              .state
+              .clients
+              .map(
+                (client) => Player.wasd(
+                  center: client.position,
+                  clientId: client.id,
+                  position: client.position,
+                ),
+              )
+              .toList(),
+        ]);
+        players = playersList.toSet().toList();
         return Scaffold(
           body: GameWidget.controlled(
-            gameFactory: () => BattleBotsGame(),
+            gameFactory: () => BattleBotsGame(
+                clientId: BlocProvider.of<GameBloc>(context).state.client!.id),
           ),
         );
       },
     );
   }
+
+  final List<Player> playersList = [];
+  static Iterable<Player> players = [];
 }

@@ -8,7 +8,7 @@ import 'game.dart';
 
 class BattleBotsWorld extends World
     with HasGameRef<BattleBotsGame>, FlameBlocListenable<GameBloc, GameState> {
-  BattleBotsWorld({required this.clientId});
+  BattleBotsWorld({required this.clientId, super.children});
 
   final String clientId;
 
@@ -25,7 +25,14 @@ class BattleBotsWorld extends World
 
     clients.where((client) => client.id != clientId).forEach((client) {
       if (client.isDeployed) {
-        gameRef.add(Player(clientId: client.id, position: client.position));
+        gameRef.add(Player.wasd(
+            center: client.position,
+            clientId: client.id,
+            position: client.position));
+        // gameRef.add(Player(
+        //     clientId: client.id,
+        //     movingBehavior: Player.wasd(center: center),
+        //     position: client.position));
       }
     });
   }

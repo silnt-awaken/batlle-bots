@@ -26,7 +26,7 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 

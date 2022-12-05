@@ -1,22 +1,37 @@
+import 'package:batlle_bots/app/views/game_view.dart';
 import 'package:batlle_bots/blocs/game/game_bloc.dart';
-import 'package:batlle_bots/game/player.dart';
+import 'package:batlle_bots/game/gameplay.dart';
 import 'package:batlle_bots/game/world.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BattleBotsGame extends FlameGame {
+enum CameraType { primary }
+
+class BattleBotsGame extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   late final BattleBotsWorld world;
 
-  BattleBotsGame({super.children});
+  BattleBotsGame({required this.clientId, super.children});
+
+  final String clientId;
+
+  late final RouterComponent router;
 
   @override
   Color backgroundColor() => const Color.fromARGB(0, 125, 61, 61);
 
   @override
   Future<void>? onLoad() async {
+    router = RouterComponent(
+      initialRoute: Gameplay.routeName,
+      routes: {
+        Gameplay.routeName: Route(() => Gameplay(children: GameView.players))
+      },
+    );
     await images.loadAll(<String>[
       'player.png',
       'arena.png',
@@ -34,26 +49,10 @@ class BattleBotsGame extends FlameGame {
 
   @override
   void onAttach() async {
-    world = BattleBotsWorld(
-        clientId: BlocProvider.of<GameBloc>(buildContext!).state.client!.id);
-    await add(
-      FlameBlocProvider<GameBloc, GameState>.value(
-        value: BlocProvider.of<GameBloc>(buildContext!),
-        children: [
-          world,
-          ...BlocProvider.of<GameBloc>(buildContext!)
-              .state
-              .clients
-              .map(
-                (client) => Player(
-                  clientId: client.id,
-                  position: client.position,
-                ),
-              )
-              .toList(),
-        ],
-      ),
-    );
+    await add(FlameBlocProvider<GameBloc, GameState>.value(
+      value: BlocProvider.of<GameBloc>(buildContext!),
+      children: [router],
+    ));
     super.onAttach();
   }
 }
