@@ -63,8 +63,6 @@ class GameRepository {
             case 'closed':
               final mapOfClientProperties = <String, Vector2>{};
               clientList
-                  // json['clients'] has the updated list of clients
-                  // we want to only include the clients that are in the updated list
                   .where((client) =>
                       json['clients'].contains(int.parse(client.id)))
                   .where((client) => client.isDeployed)
