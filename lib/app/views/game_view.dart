@@ -18,15 +18,7 @@ class GameView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: GameWidget.controlled(
-            gameFactory: () => BattleBotsGame(
-                // children: state.clients
-                //     .map(
-                //       (client) => Player(
-                //         clientId: client.id,
-                //       ),
-                //     )
-                //     .toList(),
-                ),
+            gameFactory: () => BattleBotsGame(),
           ),
         );
       },

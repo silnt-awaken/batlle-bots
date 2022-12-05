@@ -23,7 +23,7 @@ dependencies:
   flame_bloc: ^1.8.1
   tiled: ^0.10.1
   flame_tiled: ^1.9.0
-  uuid: ^3.0.7
+  window_manager: ^0.2.8
 
 dev_dependencies:
   flutter_test:

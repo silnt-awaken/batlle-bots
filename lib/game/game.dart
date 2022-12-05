@@ -26,7 +26,7 @@ class BattleBotsGame extends FlameGame {
     add(
       SpriteComponent(
         sprite: backgroundImage,
-        size: Vector2(1200, 700),
+        size: Vector2(785, 595),
         priority: -5,
       ),
     );

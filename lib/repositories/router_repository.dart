@@ -49,7 +49,6 @@ class RouterRepository {
         ),
       ],
       redirect: (context, state) {
-        // so if you're going to /lobby, call this handler
         if (state.location == '/Lobby') {
           GameRepository().init();
           return '/Lobby';
