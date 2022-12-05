@@ -3,12 +3,11 @@ import 'dart:math';
 
 import 'package:batlle_bots/models/chat.dart';
 import 'package:batlle_bots/models/client.dart';
+import 'package:batlle_bots/repositories/repositories_barrel.dart';
 import 'package:flame/components.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-import 'chat_repository.dart';
 
 class GameRepository {
   static WebSocketChannel? channel;
@@ -26,7 +25,7 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('ws://localhost:8080/ws'),
+      Uri.parse('wss://outside-server.herokuapp.com/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 
@@ -91,6 +90,25 @@ class GameRepository {
               }
 
               _clientsSubject.add(clientList);
+              break;
+            case 'move':
+              clientList[clientList
+                      .indexWhere((client) => client.id == json['client'])] =
+                  clientList[clientList
+                          .indexWhere((client) => client.id == json['client'])]
+                      .copyWith(
+                position: Vector2(
+                  json['values_x'].toDouble(),
+                  json['values_y'].toDouble(),
+                ),
+              );
+              _clientsSubject.add(clientList);
+              PlayerRepository.positionSubject.add(
+                Vector2(
+                  json['values_x'].toDouble(),
+                  json['values_y'].toDouble(),
+                ),
+              );
               break;
             default:
               break;

@@ -3,6 +3,7 @@ import 'package:batlle_bots/game/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'game.dart';
 
@@ -29,6 +30,9 @@ class BattleBotsWorld extends World
             center: client.position,
             clientId: client.id,
             position: client.position));
+        gameRef.buildContext!
+            .read<GameBloc>()
+            .add(GameToggleDeployedForClient(clientId: clientId));
       }
     });
   }

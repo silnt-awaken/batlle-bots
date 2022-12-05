@@ -1,5 +1,6 @@
 import 'package:batlle_bots/app/views/game_view.dart';
 import 'package:batlle_bots/blocs/game/game_bloc.dart';
+import 'package:batlle_bots/blocs/player/player_bloc.dart';
 import 'package:batlle_bots/game/gameplay.dart';
 import 'package:batlle_bots/game/world.dart';
 import 'package:flame/components.dart';
@@ -49,10 +50,18 @@ class BattleBotsGame extends FlameGame
 
   @override
   void onAttach() async {
-    await add(FlameBlocProvider<GameBloc, GameState>.value(
-      value: BlocProvider.of<GameBloc>(buildContext!),
-      children: [router],
-    ));
+    await add(
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<GameBloc, GameState>.value(
+            value: BlocProvider.of<GameBloc>(buildContext!),
+          ),
+          FlameBlocProvider<PlayerBloc, PlayerState>.value(
+              value: BlocProvider.of<PlayerBloc>(buildContext!)),
+        ],
+        children: [router],
+      ),
+    );
     super.onAttach();
   }
 }

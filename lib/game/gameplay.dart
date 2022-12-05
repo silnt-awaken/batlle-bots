@@ -14,6 +14,8 @@ class Gameplay extends Component
 
   Gameplay({super.children});
 
+  int resizeCounter = 0;
+
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) async {
     switch (type) {
@@ -31,12 +33,13 @@ class Gameplay extends Component
 
   @override
   void onGameResize(Vector2 size) {
-    if (gameRef.isAttached) {
+    if (gameRef.isAttached && resizeCounter == 0) {
       final world = BattleBotsWorld(
           clientId: gameRef.buildContext!.read<GameBloc>().state.client!.id,
           children: children);
 
       addAll([world]);
+      resizeCounter++;
     }
     super.onGameResize(size);
   }

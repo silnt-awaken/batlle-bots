@@ -1,5 +1,6 @@
 import 'package:batlle_bots/blocs/chat/chat_bloc.dart';
 import 'package:batlle_bots/blocs/game/game_bloc.dart';
+import 'package:batlle_bots/blocs/player/player_bloc.dart';
 import 'package:batlle_bots/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,10 @@ class App extends StatelessWidget {
         ),
         BlocProvider<ChatBloc>(
           create: (_) => ChatBloc()..add(ChatInitializeEvent()),
+          lazy: false,
+        ),
+        BlocProvider<PlayerBloc>(
+          create: (_) => PlayerBloc()..add(PlayerInitializeEvent()),
           lazy: false,
         ),
       ],

@@ -18,3 +18,8 @@ class GameDeployClient extends GameEvent {
 class GameSetClient extends GameEvent {}
 
 class GameHandleDeployedState extends GameEvent {}
+
+class GameToggleDeployedForClient extends GameEvent {
+  final String clientId;
+  const GameToggleDeployedForClient({required this.clientId});
+}

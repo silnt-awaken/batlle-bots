@@ -32,11 +32,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         'type': 'deploy',
         'client': event.client.id,
       }).codeUnits);
+      final clients = List.of(state.clients);
+      final client =
+          clients.firstWhere((client) => client.id == event.client.id);
+      clients[clients.indexOf(client)] =
+          client.copyWith(isDeployed: !client.isDeployed);
       emit(state.copyWith(status: GameStatus.deploying));
     });
 
     on<GameHandleDeployedState>((event, emit) {
       emit(state.copyWith(status: GameStatus.idle));
+    });
+
+    on<GameToggleDeployedForClient>((event, emit) {
+      final clients = List.of(state.clients);
+      final client =
+          clients.firstWhere((client) => client.id == event.clientId);
+      clients[clients.indexOf(client)] =
+          client.copyWith(isDeployed: !client.isDeployed);
+      emit(state.copyWith(clients: clients));
     });
   }
 }
