@@ -11,7 +11,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   FlutterError.onError =
       (details) => log(details.exceptionAsString(), stackTrace: details.stack);
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
 
   switch (Platform.operatingSystem) {
     case 'android':
@@ -21,6 +20,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await Flame.device.fullScreen();
       break;
     case 'windows':
+      await windowManager.ensureInitialized();
       WindowOptions windowOptions = const WindowOptions(
         size: Size(800, 600),
         minimumSize: Size(800, 600),
