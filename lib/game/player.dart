@@ -21,6 +21,7 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
 
   @override
   Future<void>? onLoad() async {
+    print(clientId);
     debugMode = true;
     final image = gameRef.images.fromCache('player.png');
     final sprite = Sprite(image);
@@ -31,6 +32,21 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
         priority: priority));
     return super.onLoad();
   }
+
+  Player.none({
+    required String clientId,
+    required Vector2 position,
+  }) : this(
+          clientId: clientId,
+          position: position,
+          size: Vector2(0, 0),
+          scale: Vector2(0, 0),
+          angle: 0,
+          anchor: Anchor.center,
+          children: [],
+          priority: 0,
+          behaviors: [],
+        );
 
   Player.arrows({
     required Vector2 center,

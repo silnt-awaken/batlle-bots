@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:batlle_bots/blocs/player/player_bloc.dart';
 import 'package:batlle_bots/game/game.dart';
+import 'package:batlle_bots/game/gameplay.dart';
 import 'package:batlle_bots/game/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
@@ -95,6 +96,8 @@ class KeyboardMovingBehavior extends Behavior<Player>
   @override
   void update(double dt) {
     super.update(dt);
+    print(gameRef.clientId);
+    print(Gameplay.gameplayChildren);
     deltaTime = dt;
     parent.position.setValues(
       parent.position.x +

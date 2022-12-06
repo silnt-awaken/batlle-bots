@@ -1,12 +1,10 @@
 import 'dart:developer';
 
-import 'package:batlle_bots/blocs/game/game_bloc.dart';
 import 'package:batlle_bots/game/game.dart';
 import 'package:batlle_bots/game/player.dart';
 import 'package:batlle_bots/game/world.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Gameplay extends Component
     with HasGameRef<BattleBotsGame>, KeyboardHandler {
@@ -16,12 +14,22 @@ class Gameplay extends Component
 
   int resizeCounter = 0;
 
+  static late final gameplayChildren;
+
+  @override
+  Future<void>? onLoad() {
+    gameplayChildren = children;
+    return super.onLoad();
+  }
+
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) async {
     switch (type) {
       case ChildrenChangeType.added:
         if (child.runtimeType == Player) {
-          gameRef.camera.followComponent(child as Player);
+          if ((child as Player).clientId == gameRef.clientId) {
+            gameRef.camera.followComponent(child);
+          }
         }
         break;
       case ChildrenChangeType.removed:
@@ -34,9 +42,8 @@ class Gameplay extends Component
   @override
   void onGameResize(Vector2 size) {
     if (gameRef.isAttached && resizeCounter == 0) {
-      final world = BattleBotsWorld(
-          clientId: gameRef.buildContext!.read<GameBloc>().state.client!.id,
-          children: children);
+      final world =
+          BattleBotsWorld(clientId: gameRef.clientId, children: children);
 
       addAll([world]);
       resizeCounter++;

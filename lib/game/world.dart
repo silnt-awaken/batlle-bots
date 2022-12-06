@@ -26,10 +26,8 @@ class BattleBotsWorld extends World
 
     clients.where((client) => client.id != clientId).forEach((client) {
       if (client.isDeployed) {
-        gameRef.add(Player.wasd(
-            center: client.position,
-            clientId: client.id,
-            position: client.position));
+        gameRef
+            .add(Player.none(clientId: client.id, position: client.position));
         gameRef.buildContext!
             .read<GameBloc>()
             .add(GameToggleDeployedForClient(clientId: clientId));
