@@ -18,15 +18,18 @@ class GameView extends StatelessWidget {
       },
       builder: (context, state) {
         playersList.addAll([
-          ...BlocProvider.of<GameBloc>(context)
-              .state
-              .clients
+          ...state.clients
               .map(
-                (client) => Player.wasd(
-                  center: client.position,
-                  clientId: client.id,
-                  position: client.position,
-                ),
+                (client) => client.id == state.client!.id
+                    ? Player.wasd(
+                        center: client.position,
+                        clientId: client.id,
+                        position: client.position,
+                      )
+                    : Player.none(
+                        clientId: client.id,
+                        position: client.position,
+                      ),
               )
               .toList(),
         ]);

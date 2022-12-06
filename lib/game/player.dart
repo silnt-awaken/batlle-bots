@@ -39,12 +39,6 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
   }) : this(
           clientId: clientId,
           position: position,
-          size: Vector2(0, 0),
-          scale: Vector2(0, 0),
-          angle: 0,
-          anchor: Anchor.center,
-          children: [],
-          priority: 0,
           behaviors: [],
         );
 
