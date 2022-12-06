@@ -21,7 +21,6 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
 
   @override
   Future<void>? onLoad() async {
-    print(clientId);
     debugMode = true;
     final image = gameRef.images.fromCache('player.png');
     final sprite = Sprite(image);

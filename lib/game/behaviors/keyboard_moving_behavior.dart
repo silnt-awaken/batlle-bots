@@ -96,8 +96,6 @@ class KeyboardMovingBehavior extends Behavior<Player>
   @override
   void update(double dt) {
     super.update(dt);
-    print(gameRef.clientId);
-    print(Gameplay.gameplayChildren);
     deltaTime = dt;
     parent.position.setValues(
       parent.position.x +
