@@ -3,7 +3,6 @@ import 'package:batlle_bots/game/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'game.dart';
 
@@ -21,16 +20,6 @@ class BattleBotsWorld extends World
     gameRef.children.whereType<Player>().forEach((element) {
       if (!clients.any((client) => client.id == element.clientId)) {
         gameRef.remove(element);
-      }
-    });
-
-    clients.where((client) => client.id != clientId).forEach((client) {
-      if (client.isDeployed) {
-        gameRef
-            .add(Player.none(clientId: client.id, position: client.position));
-        gameRef.buildContext!
-            .read<GameBloc>()
-            .add(GameToggleDeployedForClient(clientId: clientId));
       }
     });
   }

@@ -23,6 +23,8 @@ class GameRepository {
   static Stream<List<Client>> get clientsSubjectStream =>
       _clientsSubject.asBroadcastStream();
 
+  int selectedClient = 0;
+
   void init() {
     channel = IOWebSocketChannel.connect(
       Uri.parse('wss://outside-server.herokuapp.com/ws'),
@@ -39,8 +41,12 @@ class GameRepository {
           final json = jsonDecode(String.fromCharCodes(data));
 
           if (json['selected_client'] != null) {
-            clientSubject.add(
-                Client(id: json['selected_client'], position: Vector2.zero()));
+            if (selectedClient == 0) {
+              clientSubject.add(Client(
+                  id: json['selected_client'], position: Vector2.zero()));
+            }
+
+            selectedClient++;
           }
 
           switch (json['type']) {
