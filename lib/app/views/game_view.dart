@@ -1,3 +1,4 @@
+import 'package:batlle_bots/app/app_barrel.dart';
 import 'package:batlle_bots/blocs/game/game_bloc.dart';
 import 'package:batlle_bots/game/game.dart';
 import 'package:batlle_bots/game/player.dart';
@@ -13,33 +14,43 @@ class GameView extends StatelessWidget {
     return BlocConsumer<GameBloc, GameState>(
       listener: (context, state) {
         if (state.status == GameStatus.deploying) {
-          context.read<GameBloc>().add(GameHandleDeployedState());
+          playersList.clear();
+          playersList.addAll([
+            ...state.clients
+                .map(
+                  (client) => client.id == state.client!.id
+                      ? Player.wasd(
+                          center: client.position,
+                          clientId: client.id,
+                          position: client.position,
+                        )
+                      : Player.none(
+                          clientId: client.id,
+                          position: client.position,
+                        ),
+                )
+                .toList(),
+          ]);
+          players = playersList
+              .where((client) => client.position != Vector2.zero())
+              .toSet()
+              .toList();
         }
       },
       builder: (context, state) {
-        playersList.addAll([
-          ...state.clients
-              .map(
-                (client) => client.id == state.client!.id
-                    ? Player.wasd(
-                        center: client.position,
-                        clientId: client.id,
-                        position: client.position,
-                      )
-                    : Player.none(
-                        clientId: client.id,
-                        position: client.position,
-                      ),
-              )
-              .toList(),
-        ]);
-        players = playersList.toSet().toList();
-        return Scaffold(
-          body: GameWidget.controlled(
-            gameFactory: () => BattleBotsGame(
-                clientId: BlocProvider.of<GameBloc>(context).state.client!.id),
-          ),
-        );
+        if (state.status == GameStatus.deploying) {
+          return Scaffold(
+            body: GameWidget.controlled(
+              gameFactory: () => BattleBotsGame(
+                  clientId:
+                      BlocProvider.of<GameBloc>(context).state.client!.id),
+            ),
+          );
+        } else {
+          return const Scaffold(
+            body: Center(child: AppText('Setting up game...')),
+          );
+        }
       },
     );
   }

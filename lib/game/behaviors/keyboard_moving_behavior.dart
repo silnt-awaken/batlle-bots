@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:batlle_bots/blocs/player/player_bloc.dart';
 import 'package:batlle_bots/game/game.dart';
-import 'package:batlle_bots/game/gameplay.dart';
 import 'package:batlle_bots/game/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
@@ -20,7 +19,8 @@ class KeyboardMovingBehavior extends Behavior<Player>
     with
         KeyboardHandler,
         HasGameRef<BattleBotsGame>,
-        FlameBlocListenable<PlayerBloc, PlayerState> {
+        FlameBlocListenable<PlayerBloc, PlayerState>,
+        FlameBlocReader<PlayerBloc, PlayerState> {
   /// {@macro keyboard_moving_behavior}
   KeyboardMovingBehavior({
     this.speed = 100,
@@ -79,14 +79,11 @@ class KeyboardMovingBehavior extends Behavior<Player>
       ..setValues(xInput.toDouble(), yInput.toDouble())
       ..normalize();
 
-    // for this to work multiplayer, I will have to send the parent's position, and the movement, and the server will
-    // use this formula: parent.position += movement * speed * dt to return back to the client, to update the position
-
     final encodedString = json.encode({
       'type': 'move',
       'client': gameRef.clientId,
-      'values_x': movement.x,
-      'values_y': movement.y,
+      'movement_x': movement.x,
+      'movement_y': movement.y,
     });
     GameRepository.channel?.sink.add(encodedString.codeUnits);
 
@@ -122,8 +119,10 @@ class KeyboardMovingBehavior extends Behavior<Player>
   @override
   void onNewState(PlayerState state) {
     super.onNewState(state);
+
     parent.position.setValues(
-        parent.position.x + state.severMovementPosition.x * speed * deltaTime,
-        parent.position.y + state.severMovementPosition.y * speed * deltaTime);
+      parent.position.x + state.severMovementPosition.x * speed * deltaTime,
+      parent.position.y + state.severMovementPosition.y * speed * deltaTime,
+    );
   }
 }

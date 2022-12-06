@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:batlle_bots/models/chat.dart';
 import 'package:batlle_bots/models/client.dart';
@@ -27,7 +26,7 @@ class GameRepository {
 
   void init() {
     channel = IOWebSocketChannel.connect(
-      Uri.parse('wss://outside-server.herokuapp.com/ws'),
+      Uri.parse('ws://localhost:8080/ws'),
       pingInterval: const Duration(minutes: 5),
     );
 
@@ -43,7 +42,9 @@ class GameRepository {
           if (json['selected_client'] != null) {
             if (selectedClient == 0) {
               clientSubject.add(Client(
-                  id: json['selected_client'], position: Vector2.zero()));
+                  id: json['selected_client'],
+                  position: Vector2.zero(),
+                  movement: Vector2.zero()));
             }
 
             selectedClient++;
@@ -58,9 +59,7 @@ class GameRepository {
                       .copyWith(
                 isDeployed: true,
                 position: Vector2(
-                  Random().nextInt(200).toDouble(),
-                  Random().nextInt(200).toDouble(),
-                ),
+                    json['values_x'].toDouble(), json['values_y'].toDouble()),
               );
               _clientsSubject.add(clientList);
               break;
@@ -82,6 +81,7 @@ class GameRepository {
                   Client(
                     id: client.toString(),
                     position: Vector2.zero(),
+                    movement: Vector2.zero(),
                   ),
                 );
               });
@@ -103,16 +103,28 @@ class GameRepository {
                   clientList[clientList
                           .indexWhere((client) => client.id == json['client'])]
                       .copyWith(
+                movement: Vector2(
+                  json['movement_x'].toDouble(),
+                  json['movement_y'].toDouble(),
+                ),
                 position: Vector2(
-                  json['values_x'].toDouble(),
-                  json['values_y'].toDouble(),
+                  clientList[clientList.indexWhere(
+                              (client) => client.id == json['client'])]
+                          .position
+                          .x +
+                      json['movement_x'].toDouble(),
+                  clientList[clientList.indexWhere(
+                              (client) => client.id == json['client'])]
+                          .position
+                          .y +
+                      json['movement_y'].toDouble(),
                 ),
               );
               _clientsSubject.add(clientList);
               PlayerRepository.positionSubject.add(
                 Vector2(
-                  json['values_x'].toDouble(),
-                  json['values_y'].toDouble(),
+                  json['movement_x'].toDouble(),
+                  json['movement_y'].toDouble(),
                 ),
               );
               break;

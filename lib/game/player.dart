@@ -1,10 +1,11 @@
 import 'package:batlle_bots/game/behaviors/behaviors_barrel.dart';
 import 'package:batlle_bots/game/game.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/services.dart';
 
-class Player extends Entity with HasGameRef<BattleBotsGame> {
+class Player extends Entity with HasGameRef<BattleBotsGame>, EquatableMixin {
   Player({
     required this.clientId,
     super.position,
@@ -26,7 +27,8 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
     final sprite = Sprite(image);
     await add(SpriteComponent(
         sprite: sprite,
-        size: Vector2(30, 30),
+        anchor: Anchor.center,
+        size: Vector2(50, 50),
         position: position,
         priority: priority));
     return super.onLoad();
@@ -77,12 +79,19 @@ class Player extends Entity with HasGameRef<BattleBotsGame> {
     required LogicalKeyboardKey rightKey,
     required String clientId,
     required Vector2 position,
-  }) : this(clientId: clientId, position: position, behaviors: [
-          KeyboardMovingBehavior(
-            upKey: upKey,
-            downKey: downKey,
-            leftKey: leftKey,
-            rightKey: rightKey,
-          ),
-        ]);
+  }) : this(
+            clientId: clientId,
+            position: position,
+            anchor: Anchor.center,
+            behaviors: [
+              KeyboardMovingBehavior(
+                upKey: upKey,
+                downKey: downKey,
+                leftKey: leftKey,
+                rightKey: rightKey,
+              ),
+            ]);
+
+  @override
+  List<Object?> get props => [clientId];
 }

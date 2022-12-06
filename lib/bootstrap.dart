@@ -5,7 +5,22 @@ import 'dart:io';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_manager/window_manager.dart';
+
+class BattleBotsBlocObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    log('$bloc $change');
+    super.onChange(bloc, change);
+  }
+
+  // @override
+  // void onTransition(Bloc bloc, Transition transition) {
+  //   log('$bloc $transition');
+  //   super.onTransition(bloc, transition);
+  // }
+}
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   FlutterError.onError =
