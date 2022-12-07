@@ -16,22 +16,32 @@ class GameView extends StatelessWidget {
         if (state.status == GameStatus.deploying) {
           playersList.clear();
           playersList.addAll([
-            ...state.clients
-                .map(
-                  (client) => client.id == state.client!.id
-                      ? Player.wasd(
-                          center: client.position,
-                          clientId: client.id,
-                          position: client.position,
-                        )
-                      : Player.none(
-                          clientId: client.id,
-                          position: client.position,
-                        ),
-                )
-                .toList(),
+            ...state.clients.map((client) {
+              if (client.id == state.client!.id) {
+                return Player.wasd(
+                  center: client.position,
+                  clientId: client.id,
+                  position: client.position,
+                );
+              } else {
+                if (client.isDeployed) {
+                  return Player.none(
+                    clientId: client.id,
+                    position: client.position,
+                  );
+                } else {
+                  return null;
+                }
+              }
+            }).toList(),
           ]);
-          players = playersList
+          noNullPlayers.clear();
+          for (var element in playersList) {
+            if (element != null) {
+              noNullPlayers.add(element);
+            }
+          }
+          players = noNullPlayers
               .where((client) => client.position != Vector2.zero())
               .toSet()
               .toList();
@@ -61,6 +71,7 @@ class GameView extends StatelessWidget {
     );
   }
 
-  final List<Player> playersList = [];
+  final List<Player> noNullPlayers = [];
+  final List<Player?> playersList = [];
   static Iterable<Player> players = [];
 }

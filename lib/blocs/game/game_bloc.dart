@@ -68,5 +68,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           client.copyWith(isDeployed: !client.isDeployed);
       emit(state.copyWith(clients: clients));
     });
+
+    on<GameHandleDeployedState>((event, emit) {
+      emit(state.copyWith(status: GameStatus.idle));
+    });
   }
 }
