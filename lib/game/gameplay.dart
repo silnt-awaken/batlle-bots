@@ -22,6 +22,7 @@ class Gameplay extends Component
             gameRef.camera.followComponent(child);
           }
         }
+        print(child);
         break;
       case ChildrenChangeType.removed:
         log('component removed');

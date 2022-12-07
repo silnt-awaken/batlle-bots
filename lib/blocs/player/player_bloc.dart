@@ -10,8 +10,8 @@ part 'player_state.dart';
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   PlayerBloc()
       : super(PlayerState(
-            severMovementPosition: Vector2.zero(),
-            newPosition: Vector2.zero())) {
+          severMovementPosition: Vector2.zero(),
+        )) {
     final PlayerRepository playerRepository = PlayerRepository();
     on<PlayerInitializeEvent>((event, emit) async {
       await emit.forEach(playerRepository.positionStream, onData: (data) {
@@ -19,8 +19,11 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       });
     });
 
-    on<PlayerPositionChangedEvent>(((event, emit) {
-      emit(state.copyWith(newPosition: event.newPosition));
+    on<PlayerPositionChangedEvent>(((event, emit) async {
+      await emit.forEach(PlayerRepository.newPositionSubject,
+          onData: (position) {
+        return state.copyWith(newPosition: () => position);
+      });
     }));
   }
 }

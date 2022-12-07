@@ -16,17 +16,21 @@ class BattleBotsGame extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
   late final BattleBotsWorld world;
 
-  BattleBotsGame({required this.clientId, super.children});
+  BattleBotsGame(
+      {required this.clientId, super.children, required this.startPosition});
 
   final String clientId;
+  final Vector2 startPosition;
 
   late final RouterComponent router;
+  static late final Vector2 startPlayerPosition;
 
   @override
   Color backgroundColor() => const Color.fromARGB(0, 125, 61, 61);
 
   @override
   Future<void>? onLoad() async {
+    startPlayerPosition = startPosition;
     router = RouterComponent(
       initialRoute: Gameplay.routeName,
       routes: {

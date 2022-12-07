@@ -42,8 +42,14 @@ class GameView extends StatelessWidget {
           return Scaffold(
             body: GameWidget.controlled(
               gameFactory: () => BattleBotsGame(
-                  clientId:
-                      BlocProvider.of<GameBloc>(context).state.client!.id),
+                  clientId: BlocProvider.of<GameBloc>(context).state.client!.id,
+                  startPosition: BlocProvider.of<GameBloc>(context)
+                      .state
+                      .clients
+                      .firstWhere((element) =>
+                          element.id ==
+                          BlocProvider.of<GameBloc>(context).state.client!.id)
+                      .position),
             ),
           );
         } else {

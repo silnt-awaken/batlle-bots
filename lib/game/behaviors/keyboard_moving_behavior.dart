@@ -23,7 +23,7 @@ class KeyboardMovingBehavior extends Behavior<Player>
         FlameBlocReader<PlayerBloc, PlayerState> {
   /// {@macro keyboard_moving_behavior}
   KeyboardMovingBehavior({
-    this.speed = 100,
+    this.speed = 300,
     required this.downKey,
     required this.upKey,
     required this.leftKey,
@@ -84,6 +84,8 @@ class KeyboardMovingBehavior extends Behavior<Player>
       'client': gameRef.clientId,
       'movement_x': movement.x,
       'movement_y': movement.y,
+      'delta': deltaTime,
+      'speed': speed,
     });
     GameRepository.channel?.sink.add(encodedString.codeUnits);
 
@@ -94,35 +96,20 @@ class KeyboardMovingBehavior extends Behavior<Player>
   void update(double dt) {
     super.update(dt);
     deltaTime = dt;
+    final positionX =
+        (gameRef.buildContext?.read<PlayerBloc>().state.newPosition?.x ??
+            BattleBotsGame.startPlayerPosition.x);
+    final positionY =
+        (gameRef.buildContext?.read<PlayerBloc>().state.newPosition?.y ??
+            BattleBotsGame.startPlayerPosition.y);
     parent.position.setValues(
-      parent.position.x +
-          (gameRef.buildContext
-                      ?.read<PlayerBloc>()
-                      .state
-                      .severMovementPosition
-                      .x ??
-                  0) *
-              speed *
-              dt,
-      parent.position.y +
-          (gameRef.buildContext
-                      ?.read<PlayerBloc>()
-                      .state
-                      .severMovementPosition
-                      .y ??
-                  0) *
-              speed *
-              dt,
+      positionX,
+      positionY,
     );
   }
 
   @override
   void onNewState(PlayerState state) {
     super.onNewState(state);
-
-    parent.position.setValues(
-      parent.position.x + state.severMovementPosition.x * speed * deltaTime,
-      parent.position.y + state.severMovementPosition.y * speed * deltaTime,
-    );
   }
 }

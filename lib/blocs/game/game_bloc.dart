@@ -23,15 +23,19 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GameGetPlayerCountEvent>((event, emit) async {
       await emit.forEach(GameRepository.clientsSubjectStream,
           onData: (clients) {
-        log('there are ${clients.length} clients');
+        for (var client in clients) {
+          if (client.isDeployed) {
+            log('client ${client.id} is deployed at ${client.position}');
+          }
+        }
         final tempClients = List.of(clients);
         return state.copyWith(clients: tempClients);
       });
     });
 
     on<GameDeployClient>((event, emit) async {
-      var positionX = r.Random().nextInt(200).toDouble(),
-          positionY = r.Random().nextInt(200).toDouble();
+      var positionX = r.Random().nextInt(200).toDouble() + 20,
+          positionY = r.Random().nextInt(200).toDouble() + 20;
       GameRepository.channel!.sink.add(json.encode({
         'type': 'deploy',
         'client': event.client.id,
@@ -39,7 +43,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         'values_y': positionY
       }).codeUnits);
 
-      await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 2));
 
       final clients = <Client>[];
       clients.addAll(state.clients.toSet().toList());

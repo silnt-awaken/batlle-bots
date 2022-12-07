@@ -28,7 +28,9 @@ class App extends StatelessWidget {
           lazy: false,
         ),
         BlocProvider<PlayerBloc>(
-          create: (_) => PlayerBloc()..add(PlayerInitializeEvent()),
+          create: (_) => PlayerBloc()
+            ..add(PlayerInitializeEvent())
+            ..add(PlayerPositionChangedEvent()),
           lazy: false,
         ),
       ],

@@ -112,12 +112,16 @@ class GameRepository {
                               (client) => client.id == json['client'])]
                           .position
                           .x +
-                      json['movement_x'].toDouble(),
+                      json['movement_x'].toDouble() *
+                          json['speed'] *
+                          json['delta'],
                   clientList[clientList.indexWhere(
                               (client) => client.id == json['client'])]
                           .position
                           .y +
-                      json['movement_y'].toDouble(),
+                      json['movement_y'].toDouble() *
+                          json['speed'] *
+                          json['delta'],
                 ),
               );
               _clientsSubject.add(clientList);
@@ -127,6 +131,22 @@ class GameRepository {
                   json['movement_y'].toDouble(),
                 ),
               );
+              PlayerRepository.newPositionSubject.add(Vector2(
+                clientList[clientList.indexWhere(
+                            (client) => client.id == json['client'])]
+                        .position
+                        .x +
+                    json['movement_x'].toDouble() *
+                        json['speed'] *
+                        json['delta'],
+                clientList[clientList.indexWhere(
+                            (client) => client.id == json['client'])]
+                        .position
+                        .y +
+                    json['movement_y'].toDouble() *
+                        json['speed'] *
+                        json['delta'],
+              ));
               break;
             default:
               break;

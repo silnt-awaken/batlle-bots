@@ -25,12 +25,11 @@ class Player extends Entity with HasGameRef<BattleBotsGame>, EquatableMixin {
     debugMode = true;
     final image = gameRef.images.fromCache('player.png');
     final sprite = Sprite(image);
+
     await add(SpriteComponent(
-        sprite: sprite,
-        anchor: Anchor.center,
-        size: Vector2(50, 50),
-        position: position,
-        priority: priority));
+      sprite: sprite,
+      size: Vector2(32, 32),
+    ));
     return super.onLoad();
   }
 
@@ -46,13 +45,14 @@ class Player extends Entity with HasGameRef<BattleBotsGame>, EquatableMixin {
   Player.arrows({
     required Vector2 center,
   }) : this._withKeys(
-            center: center,
-            upKey: LogicalKeyboardKey.arrowUp,
-            downKey: LogicalKeyboardKey.arrowDown,
-            leftKey: LogicalKeyboardKey.arrowLeft,
-            rightKey: LogicalKeyboardKey.arrowRight,
-            clientId: '',
-            position: Vector2.zero());
+          center: center,
+          upKey: LogicalKeyboardKey.arrowUp,
+          downKey: LogicalKeyboardKey.arrowDown,
+          leftKey: LogicalKeyboardKey.arrowLeft,
+          rightKey: LogicalKeyboardKey.arrowRight,
+          clientId: '',
+          position: Vector2.zero(),
+        );
 
   /// {@macro paddle}
   ///
@@ -79,18 +79,14 @@ class Player extends Entity with HasGameRef<BattleBotsGame>, EquatableMixin {
     required LogicalKeyboardKey rightKey,
     required String clientId,
     required Vector2 position,
-  }) : this(
-            clientId: clientId,
-            position: position,
-            anchor: Anchor.center,
-            behaviors: [
-              KeyboardMovingBehavior(
-                upKey: upKey,
-                downKey: downKey,
-                leftKey: leftKey,
-                rightKey: rightKey,
-              ),
-            ]);
+  }) : this(clientId: clientId, position: position, behaviors: [
+          KeyboardMovingBehavior(
+            upKey: upKey,
+            downKey: downKey,
+            leftKey: leftKey,
+            rightKey: rightKey,
+          ),
+        ]);
 
   @override
   List<Object?> get props => [clientId];
